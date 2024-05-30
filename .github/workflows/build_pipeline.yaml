@@ -1,0 +1,33 @@
+name: Build Pipeline
+
+run-name: 'Build Pipeline For ${{github.ref_name}}'
+
+on:
+    push:
+    pull_request:
+            types: [opened, reopened]
+
+jobs:
+  build-job:
+    name: Build Job
+    runs-on: self-hosted
+    steps:
+          - name: Checkout Code Repository
+            uses: actions/checkout@v4
+          - name: Downloading Java
+            uses: actions/setup-java@v4
+            with:
+                java-version: '8'
+                distribution: 'temurin'
+          - name: Maven Build
+            run: mvn clean install
+          - name: Get Version
+            uses: ./
+            id: getVersion
+          - run: echo "Current version is ${{steps.getVersion.outputs.version}}"
+          - name: Publish To Nexus
+            run: mvn deploy --batch-mode
+        
+            
+        
+          
