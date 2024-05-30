@@ -21,9 +21,9 @@ jobs:
                 distribution: 'temurin'
           - name: Maven Build
             run: mvn clean install
-          - name: Get Version
-            uses: ./
+          - name: get-pom-version
             id: getVersion
+            uses: PERES-Richard/maven-get-version-action@v3.0.0
           - run: echo "Current version is ${{steps.getVersion.outputs.version}}"
           - name: Publish To Nexus
             run: mvn deploy --batch-mode
