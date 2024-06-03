@@ -30,7 +30,7 @@ jobs:
               echo 'Running in ${{github.ref_name}} branch'
               mvn clean install
           - name: Get Version
-            run: echo "POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) >> $GITHUB_ENV
+            run: echo "POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
           - name: Print Current Version
             run: echo "Current Version Is - ${{env.POM_VERSION}}"
 
