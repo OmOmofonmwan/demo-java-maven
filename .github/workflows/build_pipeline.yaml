@@ -20,13 +20,21 @@ jobs:
                 java-version: '11'
                 distribution: 'temurin'
           - name: Maven Build
-            run: mvn clean install
-          - name: get-pom-version
-            id: getVersion
-            uses: PERES-Richard/maven-get-version-action@v3.0.0
-          - run: echo "Current version is ${{steps.getVersion.outputs.version}}"
-          - name: Publish To Nexus
-            run: mvn deploy --batch-mode
+            if: github.ref == 'refs/heads/main'
+            run: |
+              echo 'Running in main branch'
+              mvn clean install
+          - name: Maven Build
+            if: github.ref != 'refs/heads/main'
+            run: |
+              echo 'Running in ${{github.ref_name}} branch'
+              mvn clean install
+#          - name: get-pom-version
+#            id: getVersion
+#            uses: PERES-Richard/maven-get-version-action@v3.0.0
+#          - run: echo "Current version is ${{steps.getVersion.outputs.version}}"
+#          - name: Publish To Nexus
+#            run: mvn deploy --batch-mode
         
             
         
