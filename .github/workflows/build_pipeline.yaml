@@ -30,8 +30,11 @@ jobs:
               echo 'Running in ${{github.ref_name}} branch'
               mvn clean install
           - name: Get Version
-            run: mvn help:evaluate -Dexpression=project.version -q -DforceStdout
-            
+            run: echo "POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout) >> $GITHUB_ENV
+          - name: Print Current Version
+            run: echo "Current Version Is - ${{env.POM_VERSION}}"
+
+
 #          - name: get-pom-version
 #            id: getVersion
 #            uses: PERES-Richard/maven-get-version-action@v3.0.0
