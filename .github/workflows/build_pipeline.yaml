@@ -29,18 +29,33 @@ jobs:
             run: |
               echo 'Running in ${{github.ref_name}} branch'
               mvn clean install
-          - name: Get Version
-            run: echo "POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
-          - name: Print Current Version
-            run: echo "Current Version Is - ${{env.POM_VERSION}}"
 
-
-#          - name: get-pom-version
-#            id: getVersion
-#            uses: PERES-Richard/maven-get-version-action@v3.0.0
-#          - run: echo "Current version is ${{steps.getVersion.outputs.version}}"
-#          - name: Publish To Nexus
-#            run: mvn deploy --batch-mode
+  publish-to-artifact-repositories:
+      name: Publish To Nexus & OSSRH
+      runs-on: ubuntu-latest
+      env:
+        REPOSITORY_ID: "maven-snapshots"
+      steps:
+        - name: Checkout Code Repository
+          uses: actions/checkout@v4
+        - name: Downloading Java
+          uses: actions/setup-java@v4
+          with:
+              java-version: '11'
+              distribution: 'temurin'
+        - name: Get Version
+          run: echo "POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+        - name: Print Current Version
+          run: echo "Current Version Is - ${{env.POM_VERSION}}"
+        - name: Check If Snapshot Or Release Version
+          if: ${{ !contains(env.POM_VERSION, '-SNAPSHOT') }}
+          run: echo "REPOSITORY_ID=maven-release"
+        - name: Deploy To Nexus
+          run: echo "Deploy artifact to nexus - ${{env.REPOSITORY_ID}}"
+        - name: Deploy To OSSRH
+          if: ${{ env.POM_VERSION == 'maven-release'}}
+          run: echo "Deploy aftifacts to OSSRH"
+        
         
             
         
