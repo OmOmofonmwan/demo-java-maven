@@ -54,7 +54,7 @@ jobs:
         - name: Deploy To Nexus
           run: echo "Deploy artifact to nexus - ${{env.REPOSITORY_ID}}"
         - name: Deploy To OSSRH
-          if: ${{ env.POM_VERSION == 'maven-release'}}
+          if: ${{ env.REPOSITORY_ID == 'maven-release'}}
           run: echo "Deploy aftifacts to OSSRH"
         
         
