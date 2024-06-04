@@ -33,6 +33,7 @@ jobs:
   publish-to-artifact-repositories:
       name: Publish To Nexus & OSSRH
       runs-on: ubuntu-latest
+      needs: build-job
       env:
         REPOSITORY_ID: "maven-snapshots"
       steps:
