@@ -24,7 +24,7 @@ jobs:
             run: |
               echo 'Running in main branch'
               mvn clean install
-          - name: Maven Build
+          - name: Maven Build -- Feature Branch
             if: github.ref != 'refs/heads/main'
             run: |
               echo 'Running in ${{github.ref_name}} branch'
